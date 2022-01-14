@@ -137,7 +137,7 @@ public class Step01VariableTest extends PlainTestCase {
     private void helpMethodArgumentImmutableMethodcall(String sea, int land) {
         ++land;
         String landStr = String.valueOf(land); // is "416"
-        sea.concat(landStr); //非破壊的メソッド
+        sea.concat(landStr); //非破壊的メソッド(文字列の連結)
     }
 
     // -----------------------------------------------------
@@ -192,8 +192,12 @@ public class Step01VariableTest extends PlainTestCase {
      * o すべての変数をlog()でカンマ区切りの文字列で表示
      * </pre>
      */
+    private int piari;
+
     public void test_variable_writing() {
-        // define variables here
+        String sea = "mystic";
+        Integer land = null;
+        log(sea + "," + land + "," + piari);
     }
 
     // ===================================================================================
