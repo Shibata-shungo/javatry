@@ -190,14 +190,31 @@ public class Step02IfForTest extends PlainTestCase {
         //                break;
         //            }
         //        }
+        //        stageList.forEach(stage -> {//最初のga欲しい
+        //            if (stage.startsWith("br")) {//br要らない
+        //                return;
+        //            }
+        //
+        //            if (temp.indexOf("ga") < 0) {//まだgaが見つかってなかったら
+        //                temp.delete(0, temp.length());
+        //                temp.append(stage);
+        //            }
+        //
+        //            if (stage.contains("ga") && temp.length() == 0) {//最初のgaだったら
+        //                temp.append(stage);
+        //            }
+        //        });
         stageList.forEach(stage -> {
             if (stage.startsWith("br")) {
                 return;
             }
 
-            if (stage.contains("ga")) {
-                temp.append(stage);
+            if (temp.indexOf("ga") >= 0) {
+                return;
             }
+
+            temp.delete(0, temp.length());
+            temp.append(stage);
         });
         sea = temp.toString();
         log(sea); // should be same as before-fix -> hanger
