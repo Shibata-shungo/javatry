@@ -161,6 +161,13 @@ public class Step02IfForTest extends PlainTestCase {
      */
     public void test_iffor_making() {
         // write if-for here
+        List<String> stageList = prepareStageList();
+        ArrayList<String> result = new ArrayList<String>();
+        for (String stage : stageList) {
+            if (stage.contains("a"))
+                result.add(stage);
+        }
+        log(result);
     }
 
     // ===================================================================================
@@ -173,16 +180,24 @@ public class Step02IfForTest extends PlainTestCase {
     public void test_iffor_refactor_foreach_to_forEach() {
         List<String> stageList = prepareStageList();
         String sea = null;
-        for (String stage : stageList) {
+        //        for (String stage : stageList) {
+        //            if (stage.startsWith("br")) {
+        //                continue;
+        //            }
+        //            sea = stage;
+        //            if (stage.contains("ga")) {
+        //                break;
+        //            }
+        //        }
+        stageList.forEach(stage -> {
             if (stage.startsWith("br")) {
-                continue;
+                return;
             }
-            sea = stage;
+
             if (stage.contains("ga")) {
-                break;
             }
-        }
-        log(sea); // should be same as before-fix
+        });
+        log(sea); // should be same as before-fix -> hanger
     }
 
     /**
