@@ -22,7 +22,7 @@ import org.docksidestage.unit.PlainTestCase;
  * Operate exercise as javadoc. If it's question style, write your answer before test execution. <br>
  * (javadocの通りにエクササイズを実施。質問形式の場合はテストを実行する前に考えて答えを書いてみましょう)
  * @author jflute
- * @author your_name_here
+ * @author shibata shungo
  */
 public class Step04MethodTest extends PlainTestCase {
 
@@ -35,7 +35,7 @@ public class Step04MethodTest extends PlainTestCase {
      */
     public void test_method_call_basic() {
         String sea = supplySomething();
-        log(sea); // your answer? =>
+        log(sea); // your answer? => "over"
     }
 
     /** Same as the previous method question. (前のメソッドの質問と同じ) */
@@ -43,7 +43,7 @@ public class Step04MethodTest extends PlainTestCase {
         String sea = functionSomething("mystic");
         consumeSomething(supplySomething());
         runnableSomething();
-        log(sea); // your answer? => 
+        log(sea); // your answer? => "mysmys"
     }
 
     private String functionSomething(String name) {
@@ -76,7 +76,7 @@ public class Step04MethodTest extends PlainTestCase {
         if (!land) {
             sea = sea + mutable.getStageName().length();
         }
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 910 (length()をなぜかstring()と空目して時間かかった) 
     }
 
     private int helloMutable(int sea, Boolean land, St4MutableStage piari) {
@@ -115,7 +115,7 @@ public class Step04MethodTest extends PlainTestCase {
         }
         ++sea;
         sea = inParkCount;
-        log(sea); // your answer? => 
+        log(sea); // your answer? => 100
     }
 
     private void offAnnualPassport(boolean hasAnnualPassport) {
