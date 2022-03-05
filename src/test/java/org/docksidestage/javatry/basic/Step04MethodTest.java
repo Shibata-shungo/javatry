@@ -159,26 +159,25 @@ public class Step04MethodTest extends PlainTestCase {
         }
     }
 
-    private String replaceAwithB(String args) {
-        return args.replace("A", "B");
+    private String replaceAwithB(String str) {
+        return str.replace("A", "B");
     }
 
-    private String replaceCwithB(String args) {
-        return args.replace("C", "B");
+    private String replaceCwithB(String str) {
+        return str.replace("C", "B");
     }
 
-    private String quote(String args1, String args2) {
-        return args2 + args1 + args2;
+    private String quote(String target, String quotation) {
+        return quotation + target + quotation;
     }
 
-    private Boolean isAvailableLogging() {
-        Boolean availableLogging = new Boolean(true);
+    private boolean availableLogging = true;
+
+    private boolean isAvailableLogging() {
         return availableLogging;
     }
 
-    private void showSea(String args) {
-        log(args);
+    private void showSea(String showStr) {
+        log(showStr);
     }
-
-    // write methods here
 }
