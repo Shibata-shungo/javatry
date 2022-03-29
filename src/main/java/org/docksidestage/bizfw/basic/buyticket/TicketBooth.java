@@ -17,6 +17,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 /**
  * @author jflute
+ * @author Shibata shungo
  */
 public class TicketBooth {
 
@@ -25,17 +26,25 @@ public class TicketBooth {
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
     private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
+    private static final int TWO_DAY_PRICE = 13200;
+    private static final int FOUR_DAY_PRICE = 22400;
+    private static final int NIGHT_ONLY_TWO_DAY_PRICE = 7400;
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
     private int quantity = MAX_QUANTITY;
+    private int twoDayQuantity = MAX_QUANTITY;
+    private int fourDayQuantity = MAX_QUANTITY;
+    private int nightOnlyTwoDayQuantity = MAX_QUANTITY;
     private Integer salesProceeds; // null allowed: until first purchase
+    //    private Integer twoDaySalesProceeds;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
+        //**********コンストラクタの定義って必須？**********
     }
 
     // ===================================================================================
@@ -52,21 +61,49 @@ public class TicketBooth {
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return return bought Ticket **********なぜこれが無いとエラー？**********
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
-    public void buyOneDayPassport(Integer handedMoney) {
-        if (quantity <= 0) {
+    public Ticket buyOneDayPassport(Integer handedMoney) {
+        buyPassport(handedMoney, ONE_DAY_PRICE);
+        quantity--;
+
+        return new Ticket(ONE_DAY_PRICE);
+    }
+
+    public TicketBuyResult buyTwoDayPassport(int handedMoney) {
+        buyPassport(handedMoney, TWO_DAY_PRICE);
+        twoDayQuantity--;
+
+        return new TicketBuyResult(handedMoney - TWO_DAY_PRICE, TWO_DAY_PRICE);
+    }
+
+    public TicketBuyResult buyFourDaypassport(int handedMoney) {
+        buyPassport(handedMoney, FOUR_DAY_PRICE);
+        fourDayQuantity--;
+
+        return new TicketBuyResult(handedMoney - FOUR_DAY_PRICE, FOUR_DAY_PRICE);
+    }
+
+    public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
+        buyPassport(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE);
+        nightOnlyTwoDayQuantity--;
+
+        return new TicketBuyResult(handedMoney - NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PRICE);
+    }
+
+    private void buyPassport(int handedMoney, int passportPrice) {
+        if (quantity <= 0) { //チケットが余っているか
             throw new TicketSoldOutException("Sold out");
         }
-        --quantity;
-        if (handedMoney < ONE_DAY_PRICE) {
+        if (handedMoney < passportPrice) { //金が足りているか
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
         if (salesProceeds != null) { // second or more purchase
-            salesProceeds = salesProceeds + handedMoney;
+            salesProceeds += passportPrice;
         } else { // first purchase
-            salesProceeds = handedMoney;
+            salesProceeds = passportPrice;
         }
     }
 
@@ -93,6 +130,18 @@ public class TicketBooth {
     //                                                                            ========
     public int getQuantity() {
         return quantity;
+    }
+
+    public int getTwoDayQuantity() {
+        return twoDayQuantity;
+    }
+
+    public int getFourDayQuantity() {
+        return fourDayQuantity;
+    }
+
+    public int getNightOnlyTwoDayQuantity() {
+        return nightOnlyTwoDayQuantity;
     }
 
     public Integer getSalesProceeds() {

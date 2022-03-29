@@ -17,6 +17,7 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 /**
  * @author jflute
+ * @author Shibata shungo
  */
 public class Ticket {
 
@@ -25,6 +26,9 @@ public class Ticket {
     //                                                                           =========
     private final int displayPrice; // written on ticket, park guest can watch this
     private boolean alreadyIn; // true means this ticket is unavailable
+    private int twoDayCount = 2;
+    private static final int ONE_DAY_PRICE = 7400;
+    private static final int TWO_DAY_PRICE = 13200;
 
     // ===================================================================================
     //                                                                         Constructor
@@ -37,10 +41,17 @@ public class Ticket {
     //                                                                             In Park
     //                                                                             =======
     public void doInPark() {
-        if (alreadyIn) {
-            throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
+        if (displayPrice == TWO_DAY_PRICE) {
+            if (twoDayCount == 0) {
+                throw new IllegalStateException("Already in park by this ticket twice: displayedPrice=" + displayPrice);
+            }
+            twoDayCount--;
+        } else {
+            if (alreadyIn) {
+                throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
+            }
+            alreadyIn = true;
         }
-        alreadyIn = true;
     }
 
     // ===================================================================================
@@ -52,5 +63,9 @@ public class Ticket {
 
     public boolean isAlreadyIn() {
         return alreadyIn;
+    }
+
+    public int getTwoDayCount() {
+        return twoDayCount;
     }
 }
