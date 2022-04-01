@@ -9,7 +9,7 @@ public class TicketBuyResult {
     //                                                                           Attribute
     //                                                                           =========
     private final int change;
-    private Ticket ticket;
+    private final Ticket ticket;
 
     // ===================================================================================
     //                                                                         Constructor
