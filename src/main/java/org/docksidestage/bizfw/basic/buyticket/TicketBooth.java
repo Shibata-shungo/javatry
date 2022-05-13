@@ -33,10 +33,10 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    private int quantity = MAX_QUANTITY;
-    private int twoDayQuantity = MAX_QUANTITY;
-    private int fourDayQuantity = MAX_QUANTITY;
-    private int nightOnlyTwoDayQuantity = MAX_QUANTITY;
+    private TicketQuantity quantity = new TicketQuantity(MAX_QUANTITY);
+    private TicketQuantity twoDayQuantity = new TicketQuantity(MAX_QUANTITY);
+    private TicketQuantity fourDayQuantity = new TicketQuantity(MAX_QUANTITY);
+    private TicketQuantity nightOnlyTwoDayQuantity = new TicketQuantity(MAX_QUANTITY);
     private Integer salesProceeds; // null allowed: until first purchase
 
     // ===================================================================================
@@ -68,8 +68,7 @@ public class TicketBooth {
     public Ticket buyOneDayPassport(Integer handedMoney) {
         int ticketPrice = ONE_DAY_PRICE;
 
-        doBuyPassport(handedMoney, ticketPrice);
-        quantity--;
+        doBuyPassport(handedMoney, ticketPrice, quantity);
 
         return new Ticket(ticketPrice);
     }
@@ -83,8 +82,8 @@ public class TicketBooth {
      */
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
         int ticketPrice = TWO_DAY_PRICE;
-        doBuyPassport(handedMoney, ticketPrice);
-        twoDayQuantity--;
+        
+        doBuyPassport(handedMoney, ticketPrice, twoDayQuantity);
 
         return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
     }
@@ -98,8 +97,8 @@ public class TicketBooth {
      */
     public TicketBuyResult buyFourDaypassport(int handedMoney) {
         int ticketPrice = FOUR_DAY_PRICE;
-        doBuyPassport(handedMoney, ticketPrice);
-        fourDayQuantity--;
+        
+        doBuyPassport(handedMoney, ticketPrice, fourDayQuantity);
 
         return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
     }
@@ -113,19 +112,22 @@ public class TicketBooth {
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
         int ticketPrice = NIGHT_ONLY_TWO_DAY_PRICE;
-        doBuyPassport(handedMoney, ticketPrice);
-        nightOnlyTwoDayQuantity--;
+        
+        doBuyPassport(handedMoney, ticketPrice, nightOnlyTwoDayQuantity);
 
         return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
     }
 
-    private void doBuyPassport(int handedMoney, int passportPrice) {
-        if (quantity <= 0) { //チケットが余っているか
+    private void doBuyPassport(int handedMoney, int passportPrice, TicketQuantity quantity) {
+        if (quantity.getQuantity() <= 0) { //チケットが余っているか
             throw new TicketSoldOutException("Sold out");
         }
         if (handedMoney < passportPrice) { //金が足りているか
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
+        
+        quantity.decrementQuantity();
+        
         if (salesProceeds != null) { // second or more purchase
             salesProceeds += passportPrice;
         } else { // first purchase
@@ -155,19 +157,19 @@ public class TicketBooth {
     //                                                                            Accessor
     //                                                                            ========
     public int getQuantity() {
-        return quantity;
+        return quantity.getQuantity();
     }
 
     public int getTwoDayQuantity() {
-        return twoDayQuantity;
+        return twoDayQuantity.getQuantity();
     }
 
     public int getFourDayQuantity() {
-        return fourDayQuantity;
+        return fourDayQuantity.getQuantity();
     }
 
     public int getNightOnlyTwoDayQuantity() {
-        return nightOnlyTwoDayQuantity;
+        return nightOnlyTwoDayQuantity.getQuantity();
     }
 
     public Integer getSalesProceeds() {
