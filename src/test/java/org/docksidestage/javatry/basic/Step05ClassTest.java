@@ -165,7 +165,7 @@ public class Step05ClassTest extends PlainTestCase {
      * Now you can use only one in spite of two-day passport, so fix Ticket to be able to handle plural days. <br>
      * (TwoDayPassportなのに一回しか利用できません。複数日数に対応できるようにTicketを修正しましょう)
      */
-    public void test_class_moreFix_usePluralDays() { //***一応OK***
+    public void test_class_moreFix_usePluralDays() { //***NoOK***
         TicketBooth booth = new TicketBooth();
         TicketBuyResult buyResult = booth.buyTwoDayPassport(14000);
         Ticket twoDayTicket = buyResult.getTicket();
@@ -179,7 +179,7 @@ public class Step05ClassTest extends PlainTestCase {
      * Accurately determine whether type of bought ticket is two-day passport or not by if-statemet. (fix Ticket classes if needed) <br>
      * (買ったチケットの種別がTwoDayPassportなのかどうかをif文で正確に判定してみましょう。(必要ならTicketクラスたちを修正))
      */
-    public void test_class_moreFix_whetherTicketType() { //***一応OK***
+    public void test_class_moreFix_whetherTicketType() { //***NoOK***
         // uncomment when you implement this exercise
         TicketBooth booth = new TicketBooth();
         Ticket oneDayPassport = booth.buyOneDayPassport(10000);

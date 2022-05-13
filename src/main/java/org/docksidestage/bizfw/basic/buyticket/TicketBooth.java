@@ -38,13 +38,13 @@ public class TicketBooth {
     private int fourDayQuantity = MAX_QUANTITY;
     private int nightOnlyTwoDayQuantity = MAX_QUANTITY;
     private Integer salesProceeds; // null allowed: until first purchase
-    //    private Integer twoDaySalesProceeds;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public TicketBooth() {
         //**********コンストラクタの定義って必須？**********
+        //中身がないなら無くても良い
     }
 
     // ===================================================================================
@@ -61,39 +61,65 @@ public class TicketBooth {
     /**
      * Buy one-day passport, method for park guest.
      * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
-     * @return return bought Ticket **********なぜこれが無いとエラー？**********
+     * @return bought oneDayTicket (NotNull)
      * @throws TicketSoldOutException When ticket in booth is sold out.
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public Ticket buyOneDayPassport(Integer handedMoney) {
-        buyPassport(handedMoney, ONE_DAY_PRICE);
+        int ticketPrice = ONE_DAY_PRICE;
+
+        doBuyPassport(handedMoney, ticketPrice);
         quantity--;
 
-        return new Ticket(ONE_DAY_PRICE);
+        return new Ticket(ticketPrice);
     }
 
+    /**
+     * Buy two-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return bought twoDayTicket (NotNull)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     */
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-        buyPassport(handedMoney, TWO_DAY_PRICE);
+        int ticketPrice = TWO_DAY_PRICE;
+        doBuyPassport(handedMoney, ticketPrice);
         twoDayQuantity--;
 
-        return new TicketBuyResult(handedMoney - TWO_DAY_PRICE, TWO_DAY_PRICE);
+        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
     }
 
+    /**
+     * Buy four-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return bought fourDayTicket (NotNull)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     */
     public TicketBuyResult buyFourDaypassport(int handedMoney) {
-        buyPassport(handedMoney, FOUR_DAY_PRICE);
+        int ticketPrice = FOUR_DAY_PRICE;
+        doBuyPassport(handedMoney, ticketPrice);
         fourDayQuantity--;
 
-        return new TicketBuyResult(handedMoney - FOUR_DAY_PRICE, FOUR_DAY_PRICE);
+        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
     }
 
+    /**
+     * Buy night-only-two-day passport, method for park guest.
+     * @param handedMoney The money (amount) handed over from park guest. (NotNull, NotMinus)
+     * @return bought nightOnlyTwoDayTicket (NotNull)
+     * @throws TicketSoldOutException When ticket in booth is sold out.
+     * @throws TicketShortMoneyException When the specified money is short for purchase.
+     */
     public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
-        buyPassport(handedMoney, NIGHT_ONLY_TWO_DAY_PRICE);
+        int ticketPrice = NIGHT_ONLY_TWO_DAY_PRICE;
+        doBuyPassport(handedMoney, ticketPrice);
         nightOnlyTwoDayQuantity--;
 
-        return new TicketBuyResult(handedMoney - NIGHT_ONLY_TWO_DAY_PRICE, NIGHT_ONLY_TWO_DAY_PRICE);
+        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
     }
 
-    private void buyPassport(int handedMoney, int passportPrice) {
+    private void doBuyPassport(int handedMoney, int passportPrice) {
         if (quantity <= 0) { //チケットが余っているか
             throw new TicketSoldOutException("Sold out");
         }
