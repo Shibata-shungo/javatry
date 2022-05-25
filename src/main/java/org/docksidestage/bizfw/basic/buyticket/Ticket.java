@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import java.time.LocalTime;
+
 /**
  * @author jflute
  * @author Shibata shungo
@@ -25,10 +27,9 @@ public class Ticket {
     //                                                                           Attribute
     //                                                                           =========
     private final int displayPrice; // written on ticket, park guest can watch this
-    private boolean alreadyIn; // true means this ticket is unavailable
-    private int twoDayCount = 2;
-    private static final int ONE_DAY_PRICE = 7400;
-    private static final int TWO_DAY_PRICE = 13200;
+    private int enterCount = 0; // true means this ticket is unavailable
+    private int days = 1;
+    private boolean nightOnly;
 
     // ===================================================================================
     //                                                                         Constructor
@@ -37,20 +38,42 @@ public class Ticket {
         this.displayPrice = displayPrice;
     }
 
+    public Ticket(int displayPrice, int days) {
+        this.displayPrice = displayPrice;
+        this.days = days;
+    }
+
+    public Ticket(int displayPrice, boolean nightOnly) {
+        this.displayPrice = displayPrice;
+        this.nightOnly = nightOnly;
+    }
+
+    public Ticket(int displayPrice, int days, boolean nightOnly) {
+        this.displayPrice = displayPrice;
+        this.days = days;
+        this.nightOnly = nightOnly;
+    }
+
     // ===================================================================================
     //                                                                             In Park
     //                                                                             =======
     public void doInPark() {
-        if (displayPrice == TWO_DAY_PRICE) {
-            if (twoDayCount == 0) {
-                throw new IllegalStateException("Already in park by this ticket twice: displayedPrice=" + displayPrice);
-            }
-            twoDayCount--;
+        if (enterCount == days) {
+            throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
+        }
+
+        //        LocalTime time = LocalTime.of(15, 36);
+        LocalTime time = LocalTime.now();
+        int hour = time.getHour();
+
+        if ((hour >= 8 || hour < 1) && !nightOnly) {
+            enterCount++;
+        } else if ((hour >= 18 || hour < 1) && nightOnly) {
+            enterCount++;
+        } else if (hour >= 1 && hour < 8) {
+            throw new IllegalStateException("This amusement park is open from 8:00 to 1:00!");
         } else {
-            if (alreadyIn) {
-                throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
-            }
-            alreadyIn = true;
+            throw new IllegalStateException("You can use this ticket from 18:00 to 1:00!");
         }
     }
 
@@ -61,11 +84,11 @@ public class Ticket {
         return displayPrice;
     }
 
-    public boolean isAlreadyIn() {
-        return alreadyIn;
+    public int getEnterCount() {
+        return enterCount;
     }
 
-    public int getTwoDayCount() {
-        return twoDayCount;
+    public boolean isPieceOfPaper() {
+        return enterCount == days;
     }
 }

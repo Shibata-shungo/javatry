@@ -142,9 +142,9 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBooth booth = new TicketBooth();
         Ticket oneDayPassport = booth.buyOneDayPassport(10000);
         log(oneDayPassport.getDisplayPrice()); // should be same as one-day price
-        log(oneDayPassport.isAlreadyIn()); // should be false
+        log(oneDayPassport.isPieceOfPaper()); // should be false
         oneDayPassport.doInPark();
-        log(oneDayPassport.isAlreadyIn()); // should be true
+        log(oneDayPassport.isPieceOfPaper()); // should be true
     }
 
     /**
@@ -170,9 +170,9 @@ public class Step05ClassTest extends PlainTestCase {
         TicketBuyResult buyResult = booth.buyTwoDayPassport(14000);
         Ticket twoDayTicket = buyResult.getTicket();
         twoDayTicket.doInPark();
-        log(twoDayTicket.getTwoDayCount());
+        log(twoDayTicket.isPieceOfPaper());
         twoDayTicket.doInPark();
-        log(twoDayTicket.getTwoDayCount());
+        log(twoDayTicket.isPieceOfPaper());
     }
 
     /**
@@ -225,6 +225,9 @@ public class Step05ClassTest extends PlainTestCase {
         Ticket nightOnlyTwoDayPassport = buyResult.getTicket();
         log(nightOnlyTwoDayPassport.getDisplayPrice());
         log(buyResult.getChange());
+        log(nightOnlyTwoDayPassport.getEnterCount());
+        nightOnlyTwoDayPassport.doInPark();
+        log(nightOnlyTwoDayPassport.getEnterCount());
     }
 
     /**

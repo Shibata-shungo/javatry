@@ -19,6 +19,20 @@ public class TicketBuyResult {
         ticket = new Ticket(ticketPrice);
     }
 
+    public TicketBuyResult(int change, int ticketPrice, int days) {
+        this.change = change;
+        ticket = new Ticket(ticketPrice, days);
+    }
+    
+    public TicketBuyResult(int change, int ticketPrice, boolean nightOnly) {
+        this.change = change;
+        ticket = new Ticket(ticketPrice, nightOnly);
+    }
+    
+    public TicketBuyResult(int change, int ticketPrice, int days, boolean nightOnly) {
+        this.change = change;
+        ticket = new Ticket(ticketPrice, days, nightOnly);
+    }
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========

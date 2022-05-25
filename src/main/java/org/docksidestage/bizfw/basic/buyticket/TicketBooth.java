@@ -16,6 +16,8 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
 /**
+ * 朝8時開園、夜1時閉園
+ * 夕方6時からはNIGHT TIME！
  * @author jflute
  * @author Shibata shungo
  */
@@ -82,10 +84,10 @@ public class TicketBooth {
      */
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
         int ticketPrice = TWO_DAY_PRICE;
-        
+
         doBuyPassport(handedMoney, ticketPrice, twoDayQuantity);
 
-        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
+        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice, 2);
     }
 
     /**
@@ -97,10 +99,10 @@ public class TicketBooth {
      */
     public TicketBuyResult buyFourDaypassport(int handedMoney) {
         int ticketPrice = FOUR_DAY_PRICE;
-        
+
         doBuyPassport(handedMoney, ticketPrice, fourDayQuantity);
 
-        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
+        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice, 4);
     }
 
     /**
@@ -112,10 +114,10 @@ public class TicketBooth {
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
         int ticketPrice = NIGHT_ONLY_TWO_DAY_PRICE;
-        
+
         doBuyPassport(handedMoney, ticketPrice, nightOnlyTwoDayQuantity);
 
-        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice);
+        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice, 2, true);
     }
 
     private void doBuyPassport(int handedMoney, int passportPrice, TicketQuantity quantity) {
@@ -125,9 +127,9 @@ public class TicketBooth {
         if (handedMoney < passportPrice) { //金が足りているか
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
-        
+
         quantity.decrementQuantity();
-        
+
         if (salesProceeds != null) { // second or more purchase
             salesProceeds += passportPrice;
         } else { // first purchase
