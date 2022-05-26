@@ -23,16 +23,17 @@ public class TicketBuyResult {
         this.change = change;
         ticket = new Ticket(ticketPrice, days);
     }
-    
+
     public TicketBuyResult(int change, int ticketPrice, boolean nightOnly) {
         this.change = change;
         ticket = new Ticket(ticketPrice, nightOnly);
     }
-    
+
     public TicketBuyResult(int change, int ticketPrice, int days, boolean nightOnly) {
         this.change = change;
         ticket = new Ticket(ticketPrice, days, nightOnly);
     }
+
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========

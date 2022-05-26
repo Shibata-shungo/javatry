@@ -67,13 +67,15 @@ public class Ticket {
         int hour = time.getHour();
 
         if ((hour >= 8 || hour < 1) && !nightOnly) {
+            // 通常チケットでの入場
             enterCount++;
         } else if ((hour >= 18 || hour < 1) && nightOnly) {
+            // night onlyチケットでの入場
             enterCount++;
         } else if (hour >= 1 && hour < 8) {
             throw new IllegalStateException("This amusement park is open from 8:00 to 1:00!");
         } else {
-            throw new IllegalStateException("You can use this ticket from 18:00 to 1:00!");
+            throw new IllegalStateException("You can use night only ticket from 18:00 to 1:00!");
         }
     }
 
@@ -86,6 +88,14 @@ public class Ticket {
 
     public int getEnterCount() {
         return enterCount;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public boolean isNightOnly() {
+        return nightOnly;
     }
 
     public boolean isPieceOfPaper() {

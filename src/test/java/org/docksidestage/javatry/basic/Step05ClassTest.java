@@ -191,7 +191,7 @@ public class Step05ClassTest extends PlainTestCase {
 
     // uncomment when you implement this exercise
     private void showTicketIfNeeds(Ticket ticket) {
-        if (ticket.getDisplayPrice() == 13200) { // write determination for two-day passport
+        if (ticket.getDays() == 2 && !ticket.isNightOnly()) { // write determination for two-day passport
             log("two-day passport");
         } else {
             log("other");
@@ -228,6 +228,7 @@ public class Step05ClassTest extends PlainTestCase {
         log(nightOnlyTwoDayPassport.getEnterCount());
         nightOnlyTwoDayPassport.doInPark();
         log(nightOnlyTwoDayPassport.getEnterCount());
+        log(nightOnlyTwoDayPassport.isNightOnly());
     }
 
     /**
