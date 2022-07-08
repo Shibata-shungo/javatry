@@ -17,6 +17,8 @@ package org.docksidestage.bizfw.basic.buyticket;
 
 import java.time.LocalTime;
 
+import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketType;
+
 /**
  * @author jflute
  * @author Shibata shungo
@@ -27,30 +29,25 @@ public class Ticket {
     //                                                                           Attribute
     //                                                                           =========
     private final int displayPrice; // written on ticket, park guest can watch this
-    private int enterCount = 0; // true means this ticket is unavailable
-    private int days = 1;
+    private final int maxDays;
+    private final TicketType ticketType;
+
+    private int enterCount = 0;
     private boolean nightOnly;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public Ticket(int displayPrice) {
+    public Ticket(TicketType ticketType, int displayPrice, int maxDays) {
+        this.ticketType = ticketType;
         this.displayPrice = displayPrice;
+        this.maxDays = maxDays;
     }
 
-    public Ticket(int displayPrice, int days) {
+    public Ticket(TicketType ticketType, int displayPrice, int maxDays, boolean nightOnly) {
+        this.ticketType = ticketType;
         this.displayPrice = displayPrice;
-        this.days = days;
-    }
-
-    public Ticket(int displayPrice, boolean nightOnly) {
-        this.displayPrice = displayPrice;
-        this.nightOnly = nightOnly;
-    }
-
-    public Ticket(int displayPrice, int days, boolean nightOnly) {
-        this.displayPrice = displayPrice;
-        this.days = days;
+        this.maxDays = maxDays;
         this.nightOnly = nightOnly;
     }
 
@@ -58,7 +55,7 @@ public class Ticket {
     //                                                                             In Park
     //                                                                             =======
     public void doInPark() {
-        if (enterCount == days) {
+        if (enterCount == maxDays) {
             throw new IllegalStateException("Already in park by this ticket: displayedPrice=" + displayPrice);
         }
 
@@ -91,14 +88,18 @@ public class Ticket {
     }
 
     public int getDays() {
-        return days;
+        return maxDays;
     }
 
     public boolean isNightOnly() {
         return nightOnly;
     }
 
+    public TicketType getTicketType() {
+        return ticketType;
+    }
+
     public boolean isPieceOfPaper() {
-        return enterCount == days;
+        return enterCount == maxDays;
     }
 }

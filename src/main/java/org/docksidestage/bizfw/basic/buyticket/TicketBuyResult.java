@@ -1,5 +1,7 @@
 package org.docksidestage.bizfw.basic.buyticket;
 
+import org.docksidestage.bizfw.basic.buyticket.TicketBooth.TicketType;
+
 /**
  * @author shibata shungo
  */
@@ -14,24 +16,14 @@ public class TicketBuyResult {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public TicketBuyResult(int change, int ticketPrice) {
+    public TicketBuyResult(TicketType ticketType, int change, int ticketPrice, int maxDays) {
         this.change = change;
-        ticket = new Ticket(ticketPrice);
+        ticket = new Ticket(ticketType, ticketPrice, maxDays);
     }
 
-    public TicketBuyResult(int change, int ticketPrice, int days) {
+    public TicketBuyResult(TicketType ticketType, int change, int ticketPrice, int maxDays, boolean nightOnly) {
         this.change = change;
-        ticket = new Ticket(ticketPrice, days);
-    }
-
-    public TicketBuyResult(int change, int ticketPrice, boolean nightOnly) {
-        this.change = change;
-        ticket = new Ticket(ticketPrice, nightOnly);
-    }
-
-    public TicketBuyResult(int change, int ticketPrice, int days, boolean nightOnly) {
-        this.change = change;
-        ticket = new Ticket(ticketPrice, days, nightOnly);
+        ticket = new Ticket(ticketType, ticketPrice, maxDays, nightOnly);
     }
 
     // ===================================================================================

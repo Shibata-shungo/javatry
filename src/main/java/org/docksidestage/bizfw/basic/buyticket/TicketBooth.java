@@ -50,6 +50,13 @@ public class TicketBooth {
     }
 
     // ===================================================================================
+    //                                                                          TicketType
+    //                                                                          ==========
+    public enum TicketType {
+        OneDay, TwoDay, FourDay, NightOnlyTwoDay;
+    }
+
+    // ===================================================================================
     //                                                                          Buy Ticket
     //                                                                          ==========
     // you can rewrite comments for your own language by jflute
@@ -72,7 +79,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, quantity);
 
-        return new Ticket(ticketPrice);
+        return new Ticket(TicketType.OneDay, ticketPrice, 1);
     }
 
     /**
@@ -87,7 +94,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, twoDayQuantity);
 
-        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice, 2);
+        return new TicketBuyResult(TicketType.TwoDay, handedMoney - ticketPrice, ticketPrice, 2);
     }
 
     /**
@@ -102,7 +109,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, fourDayQuantity);
 
-        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice, 4);
+        return new TicketBuyResult(TicketType.FourDay, handedMoney - ticketPrice, ticketPrice, 4);
     }
 
     /**
@@ -117,7 +124,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, nightOnlyTwoDayQuantity);
 
-        return new TicketBuyResult(handedMoney - ticketPrice, ticketPrice, 2, true);
+        return new TicketBuyResult(TicketType.NightOnlyTwoDay, handedMoney - ticketPrice, ticketPrice, 2, true);
     }
 
     private void doBuyPassport(int handedMoney, int passportPrice, TicketQuantity quantity) {
