@@ -16,15 +16,15 @@ public class TicketBuyResult {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public TicketBuyResult(TicketType ticketType, int change, int ticketPrice, int maxDays) {
-        this.change = change;
-        ticket = new Ticket(ticketType, ticketPrice, maxDays);
+    public TicketBuyResult(TicketType ticketType, int handedMoney) {
+        this.change = handedMoney - ticketType.getTicketPrice();
+        ticket = new Ticket(ticketType);
     }
 
-    public TicketBuyResult(TicketType ticketType, int change, int ticketPrice, int maxDays, boolean nightOnly) {
-        this.change = change;
-        ticket = new Ticket(ticketType, ticketPrice, maxDays, nightOnly);
-    }
+    //    public TicketBuyResult(TicketType ticketType, int change, int ticketPrice, int maxDays, boolean nightOnly) {
+    //        this.change = change;
+    //        ticket = new Ticket(ticketType, ticketPrice, maxDays, nightOnly);
+    //    }
 
     // ===================================================================================
     //                                                                            Accessor

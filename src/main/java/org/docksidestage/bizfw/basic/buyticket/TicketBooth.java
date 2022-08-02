@@ -15,6 +15,8 @@
  */
 package org.docksidestage.bizfw.basic.buyticket;
 
+import java.util.EnumSet;
+
 /**
  * 朝8時開園、夜1時閉園
  * 夕方6時からはNIGHT TIME！
@@ -52,8 +54,30 @@ public class TicketBooth {
     // ===================================================================================
     //                                                                          TicketType
     //                                                                          ==========
-    public enum TicketType {
-        OneDay, TwoDay, FourDay, NightOnlyTwoDay;
+    public enum TicketType { //もっと活用
+        OneDay(1, 7400), TwoDay(2, 13200), FourDay(4, 22400), NightOnlyTwoDay(2, 7400);
+
+        private int maxDays;
+        private int ticketPrice;
+
+        private TicketType(int maxDays, int ticketPrice) {
+            this.maxDays = maxDays;
+            this.ticketPrice = ticketPrice;
+        }
+
+        private static final EnumSet<TicketType> nightOnlyTickets = EnumSet.of(NightOnlyTwoDay);
+
+        public int getMaxDays() {
+            return maxDays;
+        }
+
+        public int getTicketPrice() {
+            return ticketPrice;
+        }
+
+        public boolean isNightOnly() {
+            return nightOnlyTickets.contains(this);
+        }
     }
 
     // ===================================================================================
@@ -79,7 +103,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, quantity);
 
-        return new Ticket(TicketType.OneDay, ticketPrice, 1);
+        return new Ticket(TicketType.OneDay);
     }
 
     /**
@@ -94,7 +118,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, twoDayQuantity);
 
-        return new TicketBuyResult(TicketType.TwoDay, handedMoney - ticketPrice, ticketPrice, 2);
+        return new TicketBuyResult(TicketType.TwoDay, handedMoney);
     }
 
     /**
@@ -109,7 +133,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, fourDayQuantity);
 
-        return new TicketBuyResult(TicketType.FourDay, handedMoney - ticketPrice, ticketPrice, 4);
+        return new TicketBuyResult(TicketType.FourDay, handedMoney);
     }
 
     /**
@@ -124,7 +148,7 @@ public class TicketBooth {
 
         doBuyPassport(handedMoney, ticketPrice, nightOnlyTwoDayQuantity);
 
-        return new TicketBuyResult(TicketType.NightOnlyTwoDay, handedMoney - ticketPrice, ticketPrice, 2, true);
+        return new TicketBuyResult(TicketType.NightOnlyTwoDay, handedMoney);
     }
 
     private void doBuyPassport(int handedMoney, int passportPrice, TicketQuantity quantity) {
