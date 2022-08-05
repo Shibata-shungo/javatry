@@ -99,9 +99,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public Ticket buyOneDayPassport(Integer handedMoney) {
-        int ticketPrice = ONE_DAY_PRICE;
 
-        doBuyPassport(handedMoney, ticketPrice, quantity);
+        doBuyPassport(handedMoney, TicketType.OneDay.getTicketPrice(), quantity);
 
         return new Ticket(TicketType.OneDay);
     }
@@ -114,9 +113,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-        int ticketPrice = TWO_DAY_PRICE;
 
-        doBuyPassport(handedMoney, ticketPrice, twoDayQuantity);
+        doBuyPassport(handedMoney, TicketType.TwoDay.getTicketPrice(), twoDayQuantity);
 
         return new TicketBuyResult(TicketType.TwoDay, handedMoney);
     }
@@ -129,9 +127,8 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyFourDaypassport(int handedMoney) {
-        int ticketPrice = FOUR_DAY_PRICE;
 
-        doBuyPassport(handedMoney, ticketPrice, fourDayQuantity);
+        doBuyPassport(handedMoney, TicketType.FourDay.getTicketPrice(), fourDayQuantity);
 
         return new TicketBuyResult(TicketType.FourDay, handedMoney);
     }
@@ -144,27 +141,26 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
-        int ticketPrice = NIGHT_ONLY_TWO_DAY_PRICE;
 
-        doBuyPassport(handedMoney, ticketPrice, nightOnlyTwoDayQuantity);
+        doBuyPassport(handedMoney, TicketType.NightOnlyTwoDay.getTicketPrice(), nightOnlyTwoDayQuantity);
 
         return new TicketBuyResult(TicketType.NightOnlyTwoDay, handedMoney);
     }
 
-    private void doBuyPassport(int handedMoney, int passportPrice, TicketQuantity quantity) {
+    private void doBuyPassport(int handedMoney, int ticketPrice, TicketQuantity quantity) {
         if (quantity.getQuantity() <= 0) { //チケットが余っているか
             throw new TicketSoldOutException("Sold out");
         }
-        if (handedMoney < passportPrice) { //金が足りているか
+        if (handedMoney < ticketPrice) { //金が足りているか
             throw new TicketShortMoneyException("Short money: " + handedMoney);
         }
 
         quantity.decrementQuantity();
 
         if (salesProceeds != null) { // second or more purchase
-            salesProceeds += passportPrice;
+            salesProceeds += ticketPrice;
         } else { // first purchase
-            salesProceeds = passportPrice;
+            salesProceeds = ticketPrice;
         }
     }
 
