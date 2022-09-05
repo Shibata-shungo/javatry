@@ -29,10 +29,6 @@ public class TicketBooth {
     //                                                                          Definition
     //                                                                          ==========
     private static final int MAX_QUANTITY = 10;
-    private static final int ONE_DAY_PRICE = 7400; // when 2019/06/15
-    private static final int TWO_DAY_PRICE = 13200;
-    private static final int FOUR_DAY_PRICE = 22400;
-    private static final int NIGHT_ONLY_TWO_DAY_PRICE = 7400;
 
     // ===================================================================================
     //                                                                           Attribute
@@ -52,17 +48,45 @@ public class TicketBooth {
     }
 
     // ===================================================================================
+    //                                                                         OpeningTime
+    //                                                                          ==========
+    public enum OpeningTime {
+        Standard(8, 1), NightOnly(18, 1);
+
+        private int openTime;
+        private int closeTime;
+
+        private OpeningTime(int openTime, int closeTime) {
+            this.openTime = openTime;
+            this.closeTime = closeTime;
+        }
+
+        public int getOpenTime() {
+            return openTime;
+        }
+
+        public int getCloseTime() {
+            return closeTime;
+        }
+    }
+
+    // ===================================================================================
     //                                                                          TicketType
     //                                                                          ==========
     public enum TicketType { //もっと活用
-        OneDay(1, 7400), TwoDay(2, 13200), FourDay(4, 22400), NightOnlyTwoDay(2, 7400);
+        OneDay(1, 7400, OpeningTime.Standard), TwoDay(2, 13200, OpeningTime.Standard), FourDay(4, 22400,
+                OpeningTime.Standard), NightOnlyTwoDay(2, 7400, OpeningTime.NightOnly);
 
         private int maxDays;
         private int ticketPrice;
+        private int openTime;
+        private int closeTime;
 
-        private TicketType(int maxDays, int ticketPrice) {
+        private TicketType(int maxDays, int ticketPrice, OpeningTime openingTime) {
             this.maxDays = maxDays;
             this.ticketPrice = ticketPrice;
+            this.openTime = openingTime.getOpenTime();
+            this.closeTime = openingTime.getCloseTime();
         }
 
         private static final EnumSet<TicketType> nightOnlyTickets = EnumSet.of(NightOnlyTwoDay);
@@ -77,6 +101,14 @@ public class TicketBooth {
 
         public boolean isNightOnly() {
             return nightOnlyTickets.contains(this);
+        }
+
+        public int getOpenTime() {
+            return openTime;
+        }
+
+        public int getCloseTime() {
+            return closeTime;
         }
     }
 
@@ -99,10 +131,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public Ticket buyOneDayPassport(Integer handedMoney) {
-
-        doBuyPassport(handedMoney, TicketType.OneDay.getTicketPrice(), quantity);
-
-        return new Ticket(TicketType.OneDay);
+        return doBuyPassport(handedMoney, TicketType.OneDay, quantity).getTicket();
     }
 
     /**
@@ -113,10 +142,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyTwoDayPassport(int handedMoney) {
-
-        doBuyPassport(handedMoney, TicketType.TwoDay.getTicketPrice(), twoDayQuantity);
-
-        return new TicketBuyResult(TicketType.TwoDay, handedMoney);
+        return doBuyPassport(handedMoney, TicketType.TwoDay, twoDayQuantity);
     }
 
     /**
@@ -127,10 +153,7 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyFourDaypassport(int handedMoney) {
-
-        doBuyPassport(handedMoney, TicketType.FourDay.getTicketPrice(), fourDayQuantity);
-
-        return new TicketBuyResult(TicketType.FourDay, handedMoney);
+        return doBuyPassport(handedMoney, TicketType.FourDay, fourDayQuantity);
     }
 
     /**
@@ -141,13 +164,12 @@ public class TicketBooth {
      * @throws TicketShortMoneyException When the specified money is short for purchase.
      */
     public TicketBuyResult buyNightOnlyTwoDayPassport(int handedMoney) {
-
-        doBuyPassport(handedMoney, TicketType.NightOnlyTwoDay.getTicketPrice(), nightOnlyTwoDayQuantity);
-
-        return new TicketBuyResult(TicketType.NightOnlyTwoDay, handedMoney);
+        return doBuyPassport(handedMoney, TicketType.NightOnlyTwoDay, nightOnlyTwoDayQuantity);
     }
 
-    private void doBuyPassport(int handedMoney, int ticketPrice, TicketQuantity quantity) {
+    private TicketBuyResult doBuyPassport(int handedMoney, TicketType ticketType, TicketQuantity quantity) {
+        int ticketPrice = ticketType.getTicketPrice();
+
         if (quantity.getQuantity() <= 0) { //チケットが余っているか
             throw new TicketSoldOutException("Sold out");
         }
@@ -162,6 +184,8 @@ public class TicketBooth {
         } else { // first purchase
             salesProceeds = ticketPrice;
         }
+
+        return new TicketBuyResult(ticketType, handedMoney - ticketPrice);
     }
 
     public static class TicketSoldOutException extends RuntimeException {

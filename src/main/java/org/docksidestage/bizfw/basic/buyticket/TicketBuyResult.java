@@ -16,9 +16,9 @@ public class TicketBuyResult {
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public TicketBuyResult(TicketType ticketType, int handedMoney) {
-        this.change = handedMoney - ticketType.getTicketPrice();
-        ticket = new Ticket(ticketType);
+    public TicketBuyResult(TicketType ticketType, int change) {
+        this.ticket = new Ticket(ticketType);
+        this.change = change;
     }
 
     //    public TicketBuyResult(TicketType ticketType, int change, int ticketPrice, int maxDays, boolean nightOnly) {

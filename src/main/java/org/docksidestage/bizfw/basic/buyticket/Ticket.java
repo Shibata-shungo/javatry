@@ -33,28 +33,17 @@ public class Ticket {
     private final TicketType ticketType;
     private final boolean nightOnly;
 
-    private final int openTime = 8; // ========================
-    private final int closeTime = 1; // Ticketクラスで持つべきではない？
-    private final int nightTime = 18; // ========================
-
     private int enterCount = 0;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
     public Ticket(TicketType ticketType) {
-        this.ticketType = ticketType;
         this.displayPrice = ticketType.getTicketPrice();
         this.maxDays = ticketType.getMaxDays();
+        this.ticketType = ticketType;
         this.nightOnly = ticketType.isNightOnly();
     }
-
-    //    public Ticket(TicketType ticketType, int displayPrice, int maxDays, boolean nightOnly) {
-    //        this.ticketType = ticketType;
-    //        this.displayPrice = displayPrice;
-    //        this.maxDays = maxDays;
-    //        this.nightOnly = nightOnly;
-    //    }
 
     // ===================================================================================
     //                                                                             In Park
@@ -68,31 +57,13 @@ public class Ticket {
         LocalTime time = LocalTime.now();
         int hour = time.getHour();
 
-        if (nightOnly) {
-            if (hour >= nightTime || hour < closeTime) {
-                enterCount++;
-            } else {
-                throw new IllegalStateException("You can use night only ticket from 18:00 to 1:00!");
-            }
+        if (hour >= ticketType.getOpenTime() || hour < ticketType.getCloseTime()) {
+            enterCount++;
+        } else if (nightOnly) {
+            throw new IllegalStateException("You can use night only ticket from 18:00 to 1:00!");
         } else {
-            if (hour >= openTime || hour < closeTime) {
-                enterCount++;
-            } else {
-                throw new IllegalStateException("This amusement park is open from 8:00 to 1:00!");
-            }
+            throw new IllegalStateException("This amusement park is open from 8:00 to 1:00!");
         }
-
-        //        if ((hour >= 8 || hour < 1) && !nightOnly) {
-        //            // 通常チケットでの入場
-        //            enterCount++;
-        //        } else if ((hour >= 18 || hour < 1) && nightOnly) {
-        //            // night onlyチケットでの入場
-        //            enterCount++;
-        //        } else if (hour >= 1 && hour < 8) {
-        //            throw new IllegalStateException("This amusement park is open from 8:00 to 1:00!");
-        //        } else {
-        //            throw new IllegalStateException("You can use night only ticket from 18:00 to 1:00!");
-        //        }
     }
 
     // ===================================================================================
