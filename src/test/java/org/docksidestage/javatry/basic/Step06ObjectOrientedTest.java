@@ -21,6 +21,7 @@ import org.docksidestage.bizfw.basic.objanimal.Animal;
 import org.docksidestage.bizfw.basic.objanimal.BarkedSound;
 import org.docksidestage.bizfw.basic.objanimal.Cat;
 import org.docksidestage.bizfw.basic.objanimal.Dog;
+import org.docksidestage.bizfw.basic.objanimal.Human;
 import org.docksidestage.bizfw.basic.objanimal.Zombie;
 import org.docksidestage.bizfw.basic.objanimal.loud.AlarmClock;
 import org.docksidestage.bizfw.basic.objanimal.loud.Loudable;
@@ -310,7 +311,12 @@ public class Step06ObjectOrientedTest extends PlainTestCase {
      * (FastRunnerではないAnimalクラスのコンクリートクラスをobjanimalパッケージに作成しましょう (実装はお好きなように))
      */
     public void test_objectOriented_polymorphism_makeConcrete() {
-        // your confirmation code here
+        Human shibata = new Human();
+        String word = shibata.bark().getBarkWord();
+        log(word);
+        log(shibata.getHitPoint());
+        shibata.repairHitPoint();
+        log(shibata.getHitPoint());
     }
 
     /**
